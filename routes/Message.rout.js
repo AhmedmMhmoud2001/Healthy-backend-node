@@ -1,88 +1,65 @@
-const { Router} = require('express');
-const app =  Router();
-const http = require('http').createServer(app);
-const io = require('socket.io')(http);
-const Message = require('../models/Message.model');
 
-io.on('connection', (socket) => {
-  console.log('a user connected');
-  
-  // receive message from client
-  socket.on('chat message', (msg) => {
-    const { senderId, recipientId, message } = msg;
 
-    // save message to database
-    const newMessage = new Message({
-      senderId,
-      recipientId,
-      message,
-      timestamp: new Date()
-    });
+// privateChat.js
+const { Router } = require('express');
+const app = Router();
+const User = require('../models/User.model');
+const Doctor = require('../models/Doctor.model');
+const Message = require('../models/Message.model')
 
-    newMessage.save(function(err) {
-      if (err) return next(err);
-
-      // emit message to sender
-      socket.emit('chat message', newMessage);
-
-      // emit message to recipient, if online
-      const recipientSocket = io.sockets.sockets.find(
-        (s) => s.userId === recipientId
-      );
-      if (recipientSocket) {
-        recipientSocket.emit('chat message', newMessage);
+const privateChat = (io) => {
+  io.on('connection', (socket) => {
+    socket.on('user-connect', async (userId) => {
+      const user = await User.findOne({_id: userId });
+      if (user) {
+        user.socketId = socket._id;
+      } else {
+        const newUser = new User({_id: userId, socketId: socket._id });
+        await newUser.save();
       }
     });
+
+    socket.on('doctor-connect', async (doctorId) => {
+      const doctor = await Doctor.findOne({_id: doctorId });
+      if (doctor) {
+        doctor.socketId = socket._id;
+      } else {
+        const newDoctor = new Doctor({_id: doctorId, socketId: socket._id });
+        await newDoctor.save();
+      }
+    });
+
+    socket.on('private-message', async (data) => {
+      const { recipient, sender, message } = data;
+      const recipientUser = await User.findOne({_id: recipient });
+      const recipientDoctor = await Doctor.findOne({_id: recipient });
+      const senderUser = await User.findOne({_id: sender });
+      const senderDoctor = await Doctor.findOne({_id: sender });
+
+      if (recipientUser) {
+        io.to(recipientUser.socketId).emit('private-message', { sender, message });
+      } else if (recipientDoctor) {
+        io.to(recipientDoctor.socketId).emit('private-message', { sender, message });
+      }
+
+      // Save the message to a database or other persistent storage if desired
+    });
   });
 
-  // set user ID when socket is connected
-  socket.on('set userId', (userId) => {
-    socket.userId = userId;
+
+
+  app.get('/:userId/:doctorId/messages', async (req, res) => {
+    const { userId, doctorId } = req.params;
+    const messages = await Message.find({ userId, doctorId });
+    res.status(200).json({ messages });
   });
 
-  socket.on('disconnect', () => {
-    console.log('user disconnected');
-  });
-});
+  return app;
+};
 
 
-// // send a message
-// app.post('/messages', function(req, res, next) {
-//     const { senderId, recipientId, message } = req.body;
-  
-//     const newMessage = new Message({
-//       senderId,
-//       recipientId,
-//       message,
-//       timestamp: new Date()
-//     });
-  
-//     newMessage.save(function(err) {
-//       if (err) return next(err);
-//       res.send('Message sent');
-//     });
-//   });
-  
+module.exports = privateChat;
 
 
-// get messages between two users
-app.get('/messages', function(req, res, next) {
-  const userId1 = req.query.userId1;
-  const userId2 = req.query.userId2;
 
-  Message.find({
-    $or: [
-      { senderId: userId1, recipientId: userId2 },
-      { senderId: userId2, recipientId: userId1 }
-    ]
-  }).exec(function(err, messages) {
-    if (err) return next(err);
-    res.send(messages);
-  });
-});
 
-http.listen(4000, () => {
-  console.log('listening on *:4000');
-});
-
-module.exports = app;

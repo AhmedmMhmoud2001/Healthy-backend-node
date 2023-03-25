@@ -5,18 +5,18 @@ const ParagraphSchema = new mongoose.Schema({
         type: String,
         required: true 
         },
-    sumary:{
+    summary:{
         type: String,
         required: true 
     }
 });
 
 const ArticleSchema = new mongoose.Schema({
-    title: { 
+    title:{ 
         type: String,
         required: true 
         },
-    sumary:{
+    summary:{
         type: String,
         required: true 
         },

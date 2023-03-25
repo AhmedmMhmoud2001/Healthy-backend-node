@@ -1,8 +1,8 @@
-const Doctor = require('../models/Doctor.model')
 const { Router } = require('express');
 const app = Router();
-const jwt = require('jsonwebtoken');
-const { SECRET_KEY } = process.env;
+const DoctorController =require('../controllers/Doctors.controller.js')
+// const jwt = require('jsonwebtoken');
+// const { SECRET_KEY } = process.env;
 
 // Create a new Doctor register
 // app.post('/register',async (req, res) => {
@@ -33,123 +33,17 @@ const { SECRET_KEY } = process.env;
 // });
 
 // Create a new doctor
-app.post('/doctors', (req, res) => {
-    const doctor = new Doctor({
-        firstname:req.body.firstname,
-        lastname:req.body.lastname,
-        phone:req.body.phone,
-        email: req.body.email,
-        password: req.body.password,
-        img:req.body.img,
-        adminAgree:req.body.adminAgree,
-        yearsOfExperience:req.body.yearsOfExperience,
-        description: req.body.description,
-        medicineLicense:req.body.medicineLicense,
-        address:req.body.address,
-        specialtie: req.body.specialtie
-    });
-  
-    doctor.save().then(() => {
-      res.send(doctor);
-    }).catch((error) => {
-      res.status(500).send({
-        message: error.message || 'Failed to create doctor.'
-      });
-    });
- });
+app.post('/doctors', DoctorController.CreateDoctor);
 
-  // Retrieve all users
-  app.get('/doctors', (req, res) => {
-    Doctor.find().then((doctors) => {
-      res.send(doctors);
-    }).catch((error) => {
-      res.status(500).send({
-        message: error.message || 'Failed to retrieve doctors.'
-      });
-    });
-  });
+  // Retrieve all doctor
+  app.get('/doctors',DoctorController.ReadAllDoctor);
   
   // Retrieve a single doctor by id
-  app.get('/doctors/:id', (req, res) => {
-    Doctor.findById(req.params.id).then((doctor) => {
-      if (!doctor) {
-        return res.status(404).send({
-          message: 'doctor not found.'
-        });
-      }
-  
-      res.send(doctor);
-    }).catch((error) => {
-      if (error.kind === 'ObjectId') {
-        return res.status(404).send({
-          message: 'doctor not found.'
-        });
-      }
-  
-      res.status(500).send({
-        message: error.message || 'Failed to retrieve doctor.'
-      });
-    });
-  });
+  app.get('/doctors/:id',DoctorController.ReadOneDoctor);
   
   // Update a doctor by id
-  app.put('/doctors/:id', (req, res) => {
-    Doctor.findByIdAndUpdate(req.params.id, {
-        firstname:req.body.firstname,
-        lastname:req.body.lastname,
-        phone:req.body.phone,
-        email: req.body.email,
-        password: req.body.password,
-        img:req.body.img,
-        adminAgree:req.body.adminAgree,
-        yearsOfExperience:req.body.yearsOfExperience,
-        description: req.body.description,
-        medicineLicense:req.body.medicineLicense,
-        address:req.body.address,
-        specialtie: req.body.specialtie
-    }, { new: true }).then((doctor) => {
-      if (!doctor) {
-        return res.status(404).send({
-          message: 'doctor not found.'
-        });
-      }
-  
-      res.send(doctor);
-    }).catch((error) => {
-      if (error.kind === 'ObjectId') {
-        return res.status(404).send({
-          message: 'doctor not found.'
-        });
-      }
-  
-      res.status(500).send({
-        message: error.message || 'Failed to update doctor.'
-      });
-    });
-  });
+  app.put('/doctors/:id',DoctorController.UpdateDoctor);
   
   // Delete a doctor by id
-  app.delete('/doctors/:id', (req, res) => {
-    Doctor.findByIdAndDelete(req.params.id)
-    .then((doctor) => {
-      if (!doctor) {
-        return res.status(404).send({
-          message: 'doctor not found.'
-        });
-      }
-      res.send({
-        message: 'doctor deleted successfully'})
-      })
-      .catch((error) => {
-          if (error.kind === 'ObjectId' || error.name === 'NotFound') {
-          return res.status(404).send({
-          message: 'doctor not found.'
-          });
-          }
-          res.status(500).send({
-              message: error.message || 'Failed to delete doctor.'
-            });
-          });
-      
-  })
+  app.delete('/doctors/:id',DoctorController.DeleteDoctor)
 module.exports = app;

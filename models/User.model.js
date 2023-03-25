@@ -26,6 +26,10 @@ const userSchema = new mongoose.Schema({
   img: {
     type: String,
   },
+  // socketId: {
+  //   type: String,
+  //   required: true,
+  // },
   // role: {
   //   type: String,
   //   enum: ['user', 'doctor', 'admin'],

@@ -1,24 +1,25 @@
 const mongoose = require('mongoose');
 
 const messageSchema = new mongoose.Schema({
-  senderId: {
+  userId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'user',
     required: true
   },
-  recipientId: {
+  doctorId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'user',
+    ref: 'doctor',
     required: true
   },
-  message: {
+  text: {
     type: String,
     required: true
   },
   timestamp: {
     type: Date,
-    required: true
+    default: Date.now
   }
+ 
 });
 
 const Message = mongoose.model('message', messageSchema);
