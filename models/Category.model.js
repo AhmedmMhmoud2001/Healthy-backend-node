@@ -6,8 +6,12 @@ const CategorySchema = new mongoose.Schema({
         },
     img:{
         type: String,
-        required: true
+        // required: true
        },
+    products: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'product'
+      }],
     //    subcategories: [{ 
     //     type: mongoose.Schema.Types.ObjectId,
     //      ref: 'Category' 

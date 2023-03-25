@@ -52,6 +52,10 @@ const DoctorSchema = new mongoose.Schema({
     createdAt: {
         type: Date,
         default: Date.now
+      }, 
+      socketId: {
+        type: String,
+        required: true,
       }
   });
   const Doctor = mongoose.model('doctor', DoctorSchema);
