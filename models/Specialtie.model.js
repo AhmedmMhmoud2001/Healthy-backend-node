@@ -2,7 +2,8 @@ const mongoose = require('mongoose');
 const SpecialtieSchema = new mongoose.Schema({
     title: { 
         type: String,
-        required: true 
+        required: true ,
+        unique: true
         },
     img:{
         type: String,

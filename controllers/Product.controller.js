@@ -58,7 +58,7 @@ const ReadAllProductInOneCategory=async (req, res, next) => {
     } catch (err) {
       next(err);
     }
-    }
+}
 const UpdateOneProduct = (req, res) => {
     Product.findByIdAndUpdate(req.params.id, {
         title:req.body.title,

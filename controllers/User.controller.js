@@ -7,8 +7,8 @@ const Createregister= async(req,res)=>{
     try {
         // console.log(req.body)
         // console.log(SECRET_KEY);
-        const { firstname,lastname,phone, email, password } = req.body;
-        const user = new User({ firstname,lastname,phone, email, password });
+        const { firstname,lastname,phone, email, password ,isDoctor } = req.body;
+        const user = new User({ firstname,lastname,phone, email, password ,isDoctor});
         // console.log(user);
         await user.save();
         const token = jwt.sign({ userId: user._id }, SECRET_KEY);
@@ -86,7 +86,9 @@ const Updateuserbyid =(req, res) => {
       lastname:req.body.lastname,
       phone:req.body.phone,
       email: req.body.email,
-      password: req.body.password
+      password: req.body.password,
+      img: req.body.img,
+      isDoctor:req.body.isDoctor
     }, { new: true }).then((user) => {
       if (!user) {
         return res.status(404).send({

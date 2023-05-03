@@ -2,16 +2,17 @@ const mongoose = require('mongoose');
 const CategorySchema = new mongoose.Schema({
     title: { 
         type: String,
-        required: true 
+        required: true ,
+        unique: true
         },
-    img:{
-        type: String,
-        // required: true
-       },
-    products: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'product'
-      }],
+    // img:{
+    //     type: String,
+    //     // required: true
+    //    },
+    // products: [{
+    //     type: mongoose.Schema.Types.ObjectId,
+    //     ref: 'product'
+    //   }],
     //    subcategories: [{ 
     //     type: mongoose.Schema.Types.ObjectId,
     //      ref: 'Category' 

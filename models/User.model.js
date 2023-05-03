@@ -25,17 +25,8 @@ const userSchema = new mongoose.Schema({
   },
   img: {
     type: String,
+    default:"https://ahmedmmhmoud2001.github.io/pharmacy-api/img/default-image.png"
   },
-  // socketId: {
-  //   type: String,
-  //   required: true,
-  // },
-  // role: {
-  //   type: String,
-  //   enum: ['user', 'doctor', 'admin'],
-  //   default: 'user'
-  // },
-  
   isAdmin: { type: Boolean, default: false, required: true },
   isDoctor: { type: Boolean, default: false, required: true },
   date: {

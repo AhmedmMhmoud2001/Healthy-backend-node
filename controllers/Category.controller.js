@@ -2,8 +2,7 @@ const Category = require('../models/Category.model')
 
 const createCategory =(req, res) => {
     const category = new Category({
-     title:req.body.title,
-     img:req.body.img,
+     title:req.body.title
     });
     category.save().then(() => {
       res.send(category);

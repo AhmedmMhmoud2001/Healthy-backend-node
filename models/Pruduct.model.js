@@ -35,22 +35,22 @@ const productSchema = new mongoose.Schema({
       
   });
 
-  productSchema.pre('save', async function(next) {
-    const product = this;
-    if (product.isNew) {
-      try {
-        const category = await Category.findOneAndUpdate(
-          { title: product.category },
-          { $push: { products: product._id } },
-          { new: true }
-        );
-        next();
-      } catch (err) {
-        next(err);
-      }
-    } else {
-      next();
-    }
-  });
+  // productSchema.pre('save', async function(next) {
+  //   const product = this;
+  //   if (product.isNew) {
+  //     try {
+  //       const category = await Category.findOneAndUpdate(
+  //         { title: product.category },
+  //         { $push: { products: product._id } },
+  //         { new: true }
+  //       );
+  //       next();
+  //     } catch (err) {
+  //       next(err);
+  //     }
+  //   } else {
+  //     next();
+  //   }
+  // });
   const Product = mongoose.model('product', productSchema);
 module.exports = Product;

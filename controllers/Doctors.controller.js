@@ -3,11 +3,13 @@ const CreateDoctor=(req, res) => {
     const doctor = new Doctor({
         firstname:req.body.firstname,
         lastname:req.body.lastname,
-        phone:req.body.phone,
-        email: req.body.email,
-        password: req.body.password,
+        // phone:req.body.phone,
+        // email: req.body.email,
+        // password: req.body.password,
         img:req.body.img,
+        userId:req.body.userId,
         adminAgree:req.body.adminAgree,
+        language:req.body.language,
         yearsOfExperience:req.body.yearsOfExperience,
         description: req.body.description,
         medicineLicense:req.body.medicineLicense,
@@ -23,6 +25,15 @@ const CreateDoctor=(req, res) => {
       });
     });
  }
+ const ReadAllDoctorInOnespecialtie=async (req, res, next) => {
+  try {
+    const doctors = await Doctor.find({ specialtie: req.params.specialtie })
+      .exec();
+      res.json(doctors);
+  } catch (err) {
+    next(err);
+  }
+}
 const ReadAllDoctor= (req, res) => {
     Doctor.find().then((doctors) => {
       res.send(doctors);
@@ -57,10 +68,12 @@ const UpdateDoctor=(req, res) => {
     Doctor.findByIdAndUpdate(req.params.id, {
         firstname:req.body.firstname,
         lastname:req.body.lastname,
-        phone:req.body.phone,
-        email: req.body.email,
-        password: req.body.password,
+        // phone:req.body.phone,
+        // email: req.body.email,
+        // password: req.body.password,
         img:req.body.img,
+        userId:req.body.userId,
+        language:req.body.language,
         adminAgree:req.body.adminAgree,
         yearsOfExperience:req.body.yearsOfExperience,
         description: req.body.description,
@@ -112,4 +125,4 @@ const DeleteDoctor =(req, res) => {
       
   }
 
-module.exports={CreateDoctor,ReadAllDoctor,ReadOneDoctor,UpdateDoctor,DeleteDoctor}
+module.exports={CreateDoctor,ReadAllDoctor,ReadOneDoctor,UpdateDoctor,DeleteDoctor,ReadAllDoctorInOnespecialtie}
