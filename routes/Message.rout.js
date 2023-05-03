@@ -6,7 +6,6 @@ const app = Router();
 const User = require('../models/User.model');
 const Doctor = require('../models/Doctor.model');
 const Message = require('../models/Message.model')
-
 const privateChat = (io) => {
   io.on('connection', (socket) => {
     socket.on('user-connect', async (userId) => {
@@ -56,7 +55,6 @@ const privateChat = (io) => {
 
   return app;
 };
-
 
 module.exports = privateChat;
 

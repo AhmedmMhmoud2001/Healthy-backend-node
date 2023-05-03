@@ -1,29 +1,24 @@
 const mongoose = require('mongoose');
 const DoctorSchema = new mongoose.Schema({
-    firstname: {
-        type: String,
-        required: true,
-      },
-    lastname: {
-        type: String,
-        required: true,
-      },
-    phone: {
-        type: String,
-        required: true
-      },
-    email: {
-        type: String,
-        required: true,
-        unique: true
-      },
-    password: {
-        type: String,
-        required: true
-      },
-    img:{
-        type: String,
-      },
+  userId:{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'user',
+    // type: String,
+    unique: true,
+    required: true
+  },
+  firstname: {
+    type: String,
+    required: true,
+  },
+  lastname: {
+    type: String,
+    required: true,
+  },
+  img: {
+    type: String,
+    default:"https://ahmedmmhmoud2001.github.io/pharmacy-api/img/default-image.png"
+  },
     adminAgree:{
         type: Boolean, 
         default: false, 
@@ -37,7 +32,11 @@ const DoctorSchema = new mongoose.Schema({
         type: String,
         required: true
       },
-    medicineLicense:{
+    // medicineLicense:{
+    //     type: String,
+    //     required: true
+    //   },
+      language :{
         type: String,
         required: true
       },
@@ -46,17 +45,17 @@ const DoctorSchema = new mongoose.Schema({
         required: true
       },
     specialtie: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'specialtie'
+      type: String,
+      required: true
       },
     createdAt: {
         type: Date,
         default: Date.now
       }, 
-      socketId: {
-        type: String,
-        required: true,
-      }
+      // socketId: {
+      //   type: String,
+      //   required: true,
+      // }
   });
   const Doctor = mongoose.model('doctor', DoctorSchema);
 module.exports = Doctor;

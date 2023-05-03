@@ -40,6 +40,8 @@ app.post('/doctors', DoctorController.CreateDoctor);
   
   // Retrieve a single doctor by id
   app.get('/doctors/:id',DoctorController.ReadOneDoctor);
+
+  app.get('/doctors/specialtie/:specialtie',DoctorController.ReadAllDoctorInOnespecialtie);
   
   // Update a doctor by id
   app.put('/doctors/:id',DoctorController.UpdateDoctor);
